@@ -1,0 +1,25 @@
+# Binaries and build artifacts
+bin/
+*.exe
+*.dll
+*.so
+*.dylib
+
+# Go build caches
+.gocache/
+
+# IDE/editor files
+.idea/
+.vscode/
+*.iml
+.DS_Store
+
+# Environment overrides
+.env
+
+# Logs and temporary files
+*.log
+*.tmp
+
+# Local data directories
+storage/

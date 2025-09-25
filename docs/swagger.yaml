@@ -1,0 +1,293 @@
+basePath: /
+definitions:
+  life-certificates_internal_service.UpdateParticipantInput:
+    properties:
+      name:
+        type: string
+      nik:
+        type: string
+    type: object
+info:
+  contact: {}
+  description: API for managing participants and life certificate verifications
+  title: Life Certificate Service API
+  version: "1.0"
+paths:
+  /life-certificate/status/{participant_id}:
+    get:
+      parameters:
+      - description: Participant ID
+        in: path
+        name: participant_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties: true
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BasicAuth: []
+      summary: Get latest life certificate status
+      tags:
+      - LifeCertificate
+  /life-certificate/verify:
+    post:
+      consumes:
+      - multipart/form-data
+      parameters:
+      - description: Participant ID
+        in: formData
+        name: participant_id
+        required: true
+        type: string
+      - description: Selfie image
+        in: formData
+        name: image
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties: true
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BasicAuth: []
+      summary: Submit life certificate verification
+      tags:
+      - LifeCertificate
+  /participants:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BasicAuth: []
+      summary: List participants
+      tags:
+      - Participants
+  /participants/{participant_id}:
+    delete:
+      parameters:
+      - description: Participant ID
+        in: path
+        name: participant_id
+        required: true
+        type: string
+      responses:
+        "204":
+          description: No Content
+          schema:
+            type: string
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties: true
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BasicAuth: []
+      summary: Delete participant
+      tags:
+      - Participants
+    get:
+      parameters:
+      - description: Participant ID
+        in: path
+        name: participant_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties: true
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BasicAuth: []
+      summary: Get participant detail
+      tags:
+      - Participants
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: Participant ID
+        in: path
+        name: participant_id
+        required: true
+        type: string
+      - description: Update payload
+        in: body
+        name: payload
+        required: true
+        schema:
+          $ref: '#/definitions/life-certificates_internal_service.UpdateParticipantInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties: true
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties: true
+            type: object
+        "409":
+          description: Conflict
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BasicAuth: []
+      summary: Update participant metadata
+      tags:
+      - Participants
+  /participants/register:
+    post:
+      consumes:
+      - multipart/form-data
+      description: Register participant and store reference with FR Core
+      parameters:
+      - description: Participant NIK
+        in: formData
+        name: nik
+        required: true
+        type: string
+      - description: Participant name
+        in: formData
+        name: name
+        required: true
+        type: string
+      - description: Initial selfie image
+        in: formData
+        name: image
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties: true
+            type: object
+        "409":
+          description: Conflict
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BasicAuth: []
+      summary: Register participant
+      tags:
+      - Participants
+securityDefinitions:
+  BasicAuth:
+    type: basic
+swagger: "2.0"
