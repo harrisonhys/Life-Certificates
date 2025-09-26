@@ -22,7 +22,7 @@ type Server struct {
 }
 
 // NewServer assembles the HTTP router and dependencies.
-func NewServer(cfg *config.Config, participantHandler *handlers.ParticipantHandler, lifeHandler *handlers.LifeCertificateHandler) *Server {
+func NewServer(cfg *config.Config, participantHandler *handlers.ParticipantHandler, memberHandler *handlers.MemberHandler, lifeHandler *handlers.LifeCertificateHandler) *Server {
 	r := chi.NewRouter()
 
 	r.Use(middleware.RequestID)
@@ -43,6 +43,14 @@ func NewServer(cfg *config.Config, participantHandler *handlers.ParticipantHandl
 			r.Put("/{participant_id}", participantHandler.Update)
 			r.Delete("/{participant_id}", participantHandler.Delete)
 			r.Post("/register", participantHandler.Register)
+		})
+
+		r.Route("/members", func(r chi.Router) {
+			r.Post("/", memberHandler.Create)
+			r.Get("/", memberHandler.List)
+			r.Get("/{member_id}", memberHandler.Get)
+			r.Put("/{member_id}", memberHandler.Update)
+			r.Delete("/{member_id}", memberHandler.Delete)
 		})
 
 		r.Route("/life-certificate", func(r chi.Router) {

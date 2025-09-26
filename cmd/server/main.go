@@ -52,17 +52,20 @@ func main() {
 	}
 
 	participantRepo := repository.NewParticipantRepository(db)
+	memberRepo := repository.NewMemberRepository(db)
 	certificateRepo := repository.NewLifeCertificateRepository(db)
 	frIdentityRepo := repository.NewFRIdentityRepository(db)
 
 	participantService := service.NewParticipantService(participantRepo, frIdentityRepo, certificateRepo, frClient)
+	memberService := service.NewMemberService(memberRepo)
 	checker := liveness.NoopChecker{Enabled: cfg.Liveness.Enabled}
 	verificationService := service.NewVerificationService(participantRepo, certificateRepo, frIdentityRepo, frClient, checker, cfg.Verification.DistanceThreshold, cfg.Verification.SimilarityThreshold)
 
 	participantHandler := handler.NewParticipantHandler(participantService)
+	memberHandler := handler.NewMemberHandler(memberService)
 	lifeHandler := handler.NewLifeCertificateHandler(verificationService)
 
-	srv := httpserver.NewServer(cfg, participantHandler, lifeHandler)
+	srv := httpserver.NewServer(cfg, participantHandler, memberHandler, lifeHandler)
 
 	sigCtx, stop := signal.NotifyContext(context.Background(), syscall.SIGINT, syscall.SIGTERM)
 	defer stop()

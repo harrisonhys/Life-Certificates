@@ -21,7 +21,7 @@ func New(dsn string) (*gorm.DB, error) {
 
 // Migrate applies the schema required for the service.
 func Migrate(db *gorm.DB) error {
-	if err := db.AutoMigrate(&domain.Participant{}, &domain.LifeCertificate{}, &domain.FRIdentity{}); err != nil {
+	if err := db.AutoMigrate(&domain.Participant{}, &domain.LifeCertificate{}, &domain.FRIdentity{}, &domain.Member{}); err != nil {
 		return fmt.Errorf("auto migrate: %w", err)
 	}
 	return nil
