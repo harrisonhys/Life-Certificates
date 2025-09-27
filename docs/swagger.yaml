@@ -1,5 +1,47 @@
 basePath: /
 definitions:
+  life-certificates_internal_service.CreateMemberInput:
+    properties:
+      address:
+        type: string
+      birth_date:
+        type: string
+      city:
+        type: string
+      email:
+        type: string
+      fullname:
+        type: string
+      nik:
+        type: string
+      nomor_peserta:
+        type: string
+      phone_number:
+        type: string
+      province:
+        type: string
+    type: object
+  life-certificates_internal_service.UpdateMemberInput:
+    properties:
+      address:
+        type: string
+      birth_date:
+        type: string
+      city:
+        type: string
+      email:
+        type: string
+      fullname:
+        type: string
+      nik:
+        type: string
+      nomor_peserta:
+        type: string
+      phone_number:
+        type: string
+      province:
+        type: string
+    type: object
   life-certificates_internal_service.UpdateParticipantInput:
     properties:
       name:
@@ -92,6 +134,191 @@ paths:
       summary: Submit life certificate verification
       tags:
       - LifeCertificate
+  /members:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BasicAuth: []
+      summary: List members
+      tags:
+      - Members
+    post:
+      consumes:
+      - application/json
+      description: Create a new member record
+      parameters:
+      - description: Member payload
+        in: body
+        name: payload
+        required: true
+        schema:
+          $ref: '#/definitions/life-certificates_internal_service.CreateMemberInput'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties: true
+            type: object
+        "409":
+          description: Conflict
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BasicAuth: []
+      summary: Create member
+      tags:
+      - Members
+  /members/{member_id}:
+    delete:
+      parameters:
+      - description: Member ID
+        in: path
+        name: member_id
+        required: true
+        type: string
+      responses:
+        "204":
+          description: No Content
+          schema:
+            type: string
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties: true
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BasicAuth: []
+      summary: Delete member
+      tags:
+      - Members
+    get:
+      parameters:
+      - description: Member ID
+        in: path
+        name: member_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties: true
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BasicAuth: []
+      summary: Get member detail
+      tags:
+      - Members
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: Member ID
+        in: path
+        name: member_id
+        required: true
+        type: string
+      - description: Update payload
+        in: body
+        name: payload
+        required: true
+        schema:
+          $ref: '#/definitions/life-certificates_internal_service.UpdateMemberInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties: true
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties: true
+            type: object
+        "409":
+          description: Conflict
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BasicAuth: []
+      summary: Update member data
+      tags:
+      - Members
   /participants:
     get:
       produces:
